@@ -10,12 +10,13 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>week1</module>
-        <module>week3</module>
-        <module>week4</module>
-        <module>week5</module>
-        <module>week2</module>
-        <module>week6</module>
+        <module>week1-1</module>
+        <module>week1-3</module>
+        <module>week1-4</module>
+        <module>week1-5</module>
+        <module>week1-2</module>
+        <module>week1-6</module>
+        <module>week2-1</module>
     </modules>
 
     <build>
