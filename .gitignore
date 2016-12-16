@@ -59,4 +59,10 @@ fabric.properties
 hs_err_pid*
 
 /.idea/
+/week1-1/target/
+/week1-2/target/
+/week1-3/target/
+/week1-4/target/
+/week1-5/target/
 /week1-6/target/
+/week2-1/target/
