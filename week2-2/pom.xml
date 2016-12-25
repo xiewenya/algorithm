@@ -3,16 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>coursera.algorithm</artifactId>
+        <artifactId>week1-1</artifactId>
         <groupId>com.coursera.algorithm</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../week1-1/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>week1-1</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>../week2-2</module>
-    </modules>
+    <artifactId>week2-2</artifactId>
+
 
 </project>
