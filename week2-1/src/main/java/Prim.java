@@ -49,6 +49,7 @@ public class Prim {
         }
     }
 
+    //generate a adjacent list
     private void addToList(int start, int end, int weight){
         if (! list.containsKey(start)){
             list.put(start, new HashMap<>());
@@ -65,6 +66,7 @@ public class Prim {
         sum = 0L;
         proceed.set(1, true);
         for(Map.Entry<Integer, Integer> tmp : list.get(1).entrySet()) {
+            //if already seen, skip
             if (proceed.get(tmp.getKey())) continue;
             queue.offer(new Node(tmp.getKey(), tmp.getValue()));
         }
