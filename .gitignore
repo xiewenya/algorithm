@@ -66,3 +66,4 @@ hs_err_pid*
 /week1-5/target/
 /week1-6/target/
 /week2-1/target/
+/week2-2/src/main/resources/clustering_big.txt
