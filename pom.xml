@@ -18,6 +18,7 @@
         <module>week1-6</module>
         <module>week2-1</module>
         <module>week2-2</module>
+        <module>week2-3</module>
     </modules>
 
     <build>
