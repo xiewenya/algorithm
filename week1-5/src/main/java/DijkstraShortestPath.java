@@ -14,27 +14,23 @@ public class DijkstraShortestPath {
     public DijkstraShortestPath(String filename, Integer length) {
         this.length = length;
         heap = new PriorityQueue<>(length, new HeapComparator());
+        heap.offer(new Node(0,0));
         nodes = new ArrayList<>(length);
-        initHeap();
+
         initAlreadySeen();
         readFromFile(filename);
     }
 
     public void process(){
-        while (!heap.isEmpty()){
-            Node node = heap.poll();
-            if (alreadySeen.get(node.getNode())) continue;
-            nodes.add(node);
-            alreadySeen.set(node.getNode(), true);
-            greetyNode(node);
-        }
-    }
-    private void greetyNode(Node node){
-        for (Node single : nodes){
-            List<Node> edges = graph.get(single.getNode());
-            for (Node edge : edges){
-                heap.offer(new Node(edge.getNode(), single.getDistance() + edge.getDistance()));
+        while (! heap.isEmpty()){
+            Node tmp = heap.poll();
+            if (alreadySeen.get(tmp.getNode())) continue;
+            nodes.add(tmp);
+            alreadySeen.set(tmp.getNode(), true);
+            for (Node node : graph.get(tmp.getNode())){
+                heap.offer(new Node(node.getNode(), node.getDistance() + tmp.getDistance()));
             }
+
         }
     }
 
@@ -44,13 +40,7 @@ public class DijkstraShortestPath {
             alreadySeen.add(false);
         }
     }
-    private void initHeap(){
-        heap.offer(new Node(0,0));
-        for ( int i = 1; i < length; i++){
-            Node node = new Node(i, 100000);
-            heap.offer(node);
-        }
-    }
+
     private void readFromFile(String filename){
         graph = new HashMap<>(length);
         File file = new File(filename);
@@ -84,7 +74,7 @@ public class DijkstraShortestPath {
     }
 
     public static void main(String[] args) throws IOException {
-        DijkstraShortestPath object = new DijkstraShortestPath("week5/src/main/resources/dijkstraData.txt", 200);
+        DijkstraShortestPath object = new DijkstraShortestPath("week1-5/src/main/resources/dijkstraData.txt", 200);
         object.process();
 //        System.out.println(object.nodes);
         Collections.sort(object.nodes, new Comparator<Node>() {
