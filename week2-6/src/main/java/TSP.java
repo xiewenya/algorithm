@@ -50,7 +50,7 @@ public class TSP {
         Map<S, Map<Integer, Double>> mapCached = new HashMap<>();
 
         for (int i = 1; i <= length; i++){
-            List<Integer> tmp = Collections.singletonList(i);
+            List<Integer> tmp = Arrays.asList(i);
             Map tMap = new HashMap();
             tMap.put(i, i == 1 ? 0 : Double.MAX_VALUE);
             mapCached.put(new S(tmp), tMap);

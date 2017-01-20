@@ -19,6 +19,6 @@ public class S {
 
     @Override
     public int hashCode() {
-        return list.hashCode();
+        return list.toString().hashCode();
     }
 }
