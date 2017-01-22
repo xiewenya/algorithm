@@ -11,10 +11,10 @@ public class TSP {
     private int length;
     private List<Location> list;
     private List<S> sList;
+    private Double[][] distanceCache;
     public TSP(String filename) {
         try {
             readFormFile(filename);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -25,6 +25,7 @@ public class TSP {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         length = Integer.parseInt(reader.readLine());
         list = new ArrayList<>(length);
+        distanceCache = new Double[length][length];
         String line;
         while ((line = reader.readLine()) != null) {
             String[] splited = line.split(" ");
@@ -47,13 +48,13 @@ public class TSP {
     }
 
     public Double tsp() {
-        Map<S, Map<Integer, Double>> mapCached = new HashMap<>();
+        Map<Integer, Map<Integer, Double>> mapCached = new HashMap<>();
 
         for (int i = 1; i <= length; i++){
             List<Integer> tmp = Arrays.asList(i);
             Map tMap = new HashMap();
             tMap.put(i, i == 1 ? 0 : Double.MAX_VALUE);
-            mapCached.put(new S(tmp), tMap);
+            mapCached.put((new S(tmp)).hashCode(), tMap);
         }
 
         for (int k = 2; k <= length; k++) {
@@ -64,24 +65,25 @@ public class TSP {
             sList = new LinkedList<>();
             combination(k - 1, length, 2, new ArrayList<>(result));
 
-            Map<S, Map<Integer, Double>> map = new HashMap<>();
+            Map<Integer, Map<Integer, Double>> map = new HashMap<>();
+            Map<Integer, Double> minCached = new HashMap<>();
             for (S s : sList) {
-                if (! map.containsKey(s)){
-                    map.put(s, new HashMap<>());
+                if (! map.containsKey(s.hashCode())){
+                    map.put(s.hashCode(), new HashMap<>());
                 }
                 for (int j : s.getList()){
                     if (j == 1) continue;
                     List<Integer> tmp = new ArrayList<Integer>(s.getList());
                     tmp.remove(tmp.indexOf(j));
                     S sTmp = new S(tmp);
-                    Map<Integer, Double> tList = new HashMap<>();
-                    for (S test : mapCached.keySet()){
-                        if (test.hashCode() == sTmp.hashCode()){
-                            tList = mapCached.get(test);
-                        }
+                    Double res;
+                    if (minCached.containsKey(sTmp.hashCode())){
+                        res = minCached.get(sTmp.hashCode());
+                    }else{
+                        res = findMin(j, mapCached.get(sTmp.hashCode()));
+                        minCached.put(sTmp.hashCode(), res);
                     }
-                    Double res = findMin(j, tList);
-                    map.get(s).put(j, res);
+                    map.get(s.hashCode()).put(j, res);
                 }
             }
 
@@ -91,6 +93,7 @@ public class TSP {
         for (Map<Integer,Double> map : mapCached.values()){
             return findMin(1, map);
         }
+
         return null;
     }
 
@@ -100,7 +103,15 @@ public class TSP {
             if (key == j) continue;
             Location p1 = list.get(key - 1);
             Location p2 = list.get(j - 1);
-            Double distance = cached.get(key) + p1.distance(p2);
+            List tmp = Arrays.asList(p1, p2);
+            Double distance;
+            if (distanceCache[key - 1][j - 1] != null){
+                distance = cached.get(key) + distanceCache[key - 1][j - 1];
+            } else{
+                distance = cached.get(key) + p1.distance(p2);
+                distanceCache[key - 1][j - 1] = p1.distance(p2);
+                distanceCache[j - 1][key - 1] = p1.distance(p2);
+            }
             min = distance < min ? distance : min;
         }
         return min;
@@ -109,15 +120,11 @@ public class TSP {
     public static void main(String[] args) {
         TSP tsp = new TSP("week2-6/src/main/resources/tsp.txt");
         System.out.println(tsp.tsp());
+//        List<Integer> result = new ArrayList<>(5);
+//        result.add(1);
+//        //get all combination of S;
 //        tsp.sList = new LinkedList<>();
-//        System.out.println(tsp.sList.size());
-//
-//        int[] test = {0,1};
-//        S compare = new S(test);
-//        for (S s : tsp.sList){
-//            if (s.equals(compare)){
-//                System.out.println(Arrays.toString(s.getList()));
-//            }
-//        }
+//        tsp.combination(5, 10, 2, new ArrayList<>(result));
+//        System.out.println(tsp.tsp());
     }
 }
