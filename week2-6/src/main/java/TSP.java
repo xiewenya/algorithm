@@ -54,7 +54,7 @@ public class TSP {
             mapCached.put(tmp, tMap);
         }
 
-        for (int k = 11; k <= length; k++) {
+        for (int k = 2; k <= length; k++) {
             Long tStart = System.currentTimeMillis();
             System.out.println(k);
 
