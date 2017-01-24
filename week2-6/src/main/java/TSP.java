@@ -10,7 +10,7 @@ import java.util.*;
 public class TSP {
     private int length;
     private List<Location> list;
-    private List<S> sList;
+    private List<List<Integer>> sList;
     private Double[][] distanceCache;
     public TSP(String filename) {
         try {
@@ -35,8 +35,7 @@ public class TSP {
 
     public void combination(int n, int total, int begin, List<Integer> result) {
         if (n == 0) {//如果够n个数了，输出b数组
-            S s = new S(result);
-            sList.add(s);
+            sList.add(result);
             return;
         }
 
@@ -54,40 +53,43 @@ public class TSP {
             List<Integer> tmp = Arrays.asList(i);
             Map tMap = new HashMap();
             tMap.put(i, i == 1 ? 0 : Double.MAX_VALUE);
-            mapCached.put((new S(tmp)).hashCode(), tMap);
+            mapCached.put(tmp.hashCode(), tMap);
         }
 
         for (int k = 2; k <= length; k++) {
+            Long tStart = System.currentTimeMillis();
             System.out.println(k);
             List<Integer> result = new ArrayList<>(k);
             result.add(1);
             //get all combination of S;
             sList = new LinkedList<>();
             combination(k - 1, length, 2, new ArrayList<>(result));
-
-            Map<Integer, Map<Integer, Double>> map = new HashMap<>();
-            Map<Integer, Double> minCached = new HashMap<>();
-            for (S s : sList) {
-                if (! map.containsKey(s.hashCode())){
-                    map.put(s.hashCode(), new HashMap<>());
+            System.out.println(sList.size());
+            Map<Integer, Map<Integer, Double>> map = new HashMap<>(result.size());
+            Map<Integer, Double> minCached = new HashMap<>(result.size());
+            for (List<Integer> list : sList) {
+                int hash = list.hashCode();
+                if (! map.containsKey(hash)){
+                    map.put(hash, new HashMap<>());
                 }
-                for (int j : s.getList()){
+                for (int j : list){
                     if (j == 1) continue;
-                    List<Integer> tmp = new ArrayList<Integer>(s.getList());
+                    List<Integer> tmp = new ArrayList<>(list);
                     tmp.remove(tmp.indexOf(j));
-                    S sTmp = new S(tmp);
                     Double res;
-                    if (minCached.containsKey(sTmp.hashCode())){
-                        res = minCached.get(sTmp.hashCode());
+                    int tmpHash = tmp.hashCode();
+                    if (minCached.containsKey(tmpHash)){
+                        res = minCached.get(tmpHash);
                     }else{
-                        res = findMin(j, mapCached.get(sTmp.hashCode()));
-                        minCached.put(sTmp.hashCode(), res);
+                        res = findMin(j, mapCached.get(tmpHash));
+                        minCached.put(tmpHash, res);
                     }
-                    map.get(s.hashCode()).put(j, res);
+                    map.get(hash).put(j, res);
                 }
             }
 
             mapCached = map;
+            System.out.println("time used:" + (System.currentTimeMillis() - tStart));
         }
 
         for (Map<Integer,Double> map : mapCached.values()){
