@@ -11,6 +11,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>week2-7</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>../week2-8</module>
+    </modules>
 
 
 </project>
